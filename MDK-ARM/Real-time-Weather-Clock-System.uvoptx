@@ -157,9 +157,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>46</LineNumber>
+          <LineNumber>161</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134219516</Address>
+          <Address>134220030</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -168,7 +168,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\Core\Src\ESP.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Real_time_Weather_Clock_System\../Core/Src/ESP.c\46</Expression>
+          <Expression>\\Real_time_Weather_Clock_System\../Core/Src/ESP.c\161</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>44</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134224646</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\Core\Src\msg_parse.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Real_time_Weather_Clock_System\../Core/Src/msg_parse.c\44</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -185,12 +201,12 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>esp_t-&gt;ssid</ItemText>
+          <ItemText>esp_t-&gt;response</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>esp_t-&gt;ssid</ItemText>
+          <ItemText>LCD_refreshHandle</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>

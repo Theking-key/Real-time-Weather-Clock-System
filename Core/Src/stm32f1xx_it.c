@@ -199,13 +199,11 @@ void USART2_IRQHandler(void)
 
   /* USER CODE END USART2_IRQn 0 */
   /* USER CODE BEGIN USART2_IRQn 1 */
- // ÊÖ¶¯¼ì²â¿ÕÏÐÖÐ¶Ï±êÖ¾
+ // æ‰‹åŠ¨æ£€æµ‹ç©ºé—²ä¸­æ–­æ ‡å¿—
   if(__HAL_UART_GET_FLAG(&huart2, UART_FLAG_IDLE) != RESET)
   {
-      __HAL_UART_CLEAR_IDLEFLAG(&huart2); // ±ØÐëÇå³ýIDLE±êÖ¾
-      // ÕâÀïÐ´ÄãµÄ¿ÕÏÐ´¦ÀíÂß¼­£¬Ìæ´úHAL_UART_RxIdleCallback
+      __HAL_UART_CLEAR_IDLEFLAG(&huart2); 
       uint16_t recv_len = 300 - __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);
-      // ESPÊý¾Ý½âÎö
       HAL_UART_RxIdleCallback(&huart2);
 
   }

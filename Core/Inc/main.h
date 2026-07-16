@@ -31,18 +31,18 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-	
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-// ´æ·Å½âÎö³öÀ´µÄÌìÆøĞÅÏ¢
+// å­˜æ”¾è§£æå‡ºæ¥çš„å¤©æ°”ä¿¡æ¯
 typedef struct
 {
-    char city[24];        // ³ÇÊĞÃû
-    char weather_text[16];// ¶àÔÆ/Çç
-    char weather_code[8]; // ÌìÆø´úÂë
-    char temp[8];         // ÎÂ¶È
+    char city[24];        // åŸå¸‚å
+    char weather_text[16];// å¤šäº‘/æ™´
+    char weather_code[8]; // å¤©æ°”ä»£ç 
+    char temp[8];         // æ¸©åº¦
 } WeatherInfo_t;
 /* USER CODE END ET */
 

@@ -1,5 +1,6 @@
 #include "ESP.h"
 #include "cmsis_os.h"
+#include "msg_parse.h"
 
 ESP_t esp_storage;
 
@@ -114,6 +115,11 @@ void ESP_Reset(void)
 
 bool ESP_CWJAP(const char* ssid, const char* password)
 {
+    // 如果当前已连接的WiFi和要连接的是同一个，直接返回成功
+    if (strlen(esp_t->ssid) > 0 && strcmp(esp_t->ssid, ssid) == 0 ) 
+    return true;
+        
+    
 
     memset(esp_t->response, 0, ESP_RESPONSE_BUFFER_SIZE);
 
@@ -134,7 +140,9 @@ bool ESP_CWJAP(const char* ssid, const char* password)
         // 连接失败
         return false;
     } else {
-        // 连接成功，进行错误处理
+        // 连接成功，更新当前ssid记录
+        strncpy(esp_t->ssid, ssid, sizeof(esp_t->ssid) - 1);
+        esp_t->ssid[sizeof(esp_t->ssid) - 1] = '\0';
         return true;
     }
 }
@@ -150,6 +158,8 @@ bool ESP_HTTP(const char* url)
         HAL_Delay(100);
         // 等待HTTP请求完成
     }
+    SendMessage(ESP_DATA, esp_t->length, esp_t->response);
+
     esp_t->idlestatus = 0; // 重置idle状态为0
     if (strstr(esp_t->response, "OK") != NULL) {
         // HTTP请求成功 

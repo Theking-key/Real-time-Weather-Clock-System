@@ -1,11 +1,14 @@
-#include "msg_parse.h"
 #include "main.h"
 #include "stdbool.h"
 #include "string.h"
+#include "msg_parse.h"
+#include "cmsis_os.h"
 
-extern WeatherInfo_t weather_info; // ÉùÃ÷È«¾Ö±äÁ¿
-extern osMessageQueueId_t Data_Parsing_queueHandle; // ÉùÃ÷ÏûÏ¢¶ÓÁĞ¾ä±ú
-extern osSemaphoreId_t LCD_refreshHandle; // ÉùÃ÷ĞÅºÅÁ¿¾ä±ú
+extern WeatherInfo_t weather_info; // å£°æ˜å…¨å±€å˜é‡
+extern osMessageQueueId_t Data_Parsing_queueHandle; // å£°æ˜æ¶ˆæ¯é˜Ÿåˆ—å¥æŸ„
+extern osSemaphoreId_t LCD_refreshHandle; // å£°æ˜ä¿¡å·é‡å¥æŸ„
+extern UART_HandleTypeDef huart1; // å£°æ˜UARTå¥æŸ„
+
 
 static bool SubString(char *src, const char *start_mark, const char *end_mark, char *dst, uint16_t dst_len)
 {
@@ -42,31 +45,49 @@ void ReceiveMessage(void) {
     // Receive the message from the queue
     if (osMessageQueueGet(Data_Parsing_queueHandle, &msg, NULL, osWaitForever) == osOK) {
         // Process the received message
-        Message_parse(msg.msgtype, msg.length, msg.data);
+
+    if (msg.msgtype == ESP_DATA) {
+        Message_parse_esp(msg.length, msg.data);
+        }
+
+    if (msg.msgtype == LCD_DATA) {
+        Message_parse_lcd(msg.length, msg.data);
+        }
+    
     }
 }
 
-void Message_parse(uint8_t msgtype, uint8_t length, char *data) {
+void Message_parse_esp( uint8_t length, char *data) {
     // Implement your message processing logic here
-    if (msgtype == ESP_DATA) {
+    
 
-        memset(&weather_info, 0, sizeof(WeatherInfo_t));
+    memset(&weather_info, 0, sizeof(WeatherInfo_t));
+    // 1. æå–åŸå¸‚ name:"åŒ—äº¬"
+    if(!SubString(data, "\"name\":\"", "\"", weather_info.city, sizeof(weather_info.city)))
+        HAL_UART_Transmit(&huart1, (uint8_t*)"Failed to extract city name\n", strlen("Failed to extract city name\n"), 100);
 
-    // 1. ÌáÈ¡³ÇÊĞ name:"±±¾©"
-    if(!SubString(data, "\"name\":\"", "\"", weather_info.city, sizeof(weather_info.city)));
+    // 2. æå–å¤©æ°”æ–‡å­— text":"å¤šäº‘"
+    if(!SubString(data, "\"text\":\"", "\"", weather_info.weather_text, sizeof(weather_info.weather_text)))
+        HAL_UART_Transmit(&huart1, (uint8_t*)"Failed to extract weather text\n", strlen("Failed to extract weather text\n"), 100);
 
-    // 2. ÌáÈ¡ÌìÆøÎÄ×Ö text":"¶àÔÆ"
-    if(!SubString(data, "\"text\":\"", "\"", weather_info.weather_text, sizeof(weather_info.weather_text)));
+    // 3. æå–å¤©æ°”code code":"4"
+    if(!SubString(data , "\"code\":\"", "\"", weather_info.weather_code, sizeof(weather_info.weather_code)))
+        HAL_UART_Transmit(&huart1, (uint8_t*)"Failed to extract weather code\n", strlen("Failed to extract weather code\n"), 100);
 
-    // 3. ÌáÈ¡ÌìÆøcode code":"4"
-    if(!SubString(data , "\"code\":\"", "\"", weather_info.weather_code, sizeof(weather_info.weather_code)));
+    // 4. æå–æ¸©åº¦ temperature":"28"
+    if(!SubString(data, "\"temperature\":\"", "\"", weather_info.temp, sizeof(weather_info.temp)))
+        HAL_UART_Transmit(&huart1, (uint8_t*)"Failed to extract temperature\n", strlen("Failed to extract temperature\n"), 100);
 
-    // 4. ÌáÈ¡ÎÂ¶È temperature":"28"
-    if(!SubString(data, "\"temperature\":\"", "\"", weather_info.temp, sizeof(weather_info.temp)));
+        HAL_UART_Transmit(&huart1, (uint8_t*)weather_info.city, strlen(weather_info.city), 100);
+        HAL_UART_Transmit(&huart1, (uint8_t*)weather_info.weather_text, strlen(weather_info.weather_text), 100);
+        HAL_UART_Transmit(&huart1, (uint8_t*)weather_info.weather_code, strlen(weather_info.weather_code), 100);
+        HAL_UART_Transmit(&huart1, (uint8_t*)weather_info.temp, strlen(weather_info.temp), 100);
 
     osSemaphoreRelease(LCD_refreshHandle);
         // Handle ESP data
-    } else if (msgtype == LCD_DATA) {
-        // Handle LCD data
-    }
+    
+}
+
+void Message_parse_lcd(uint8_t length, char *data){
+
 }

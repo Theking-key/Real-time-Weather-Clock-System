@@ -8,8 +8,8 @@ extern UART_HandleTypeDef huart1;
 #define ESP_RESPONSE_BUFFER_SIZE 300
 
 typedef struct {
-    char response[ESP_RESPONSE_BUFFER_SIZE]; // ´æ´¢ÏìÓ¦µÄ»º³åÇø
-    size_t length;      // ÏìÓ¦µÄ³¤¶È
+    char response[ESP_RESPONSE_BUFFER_SIZE]; // å­˜å‚¨å“åº”çš„ç¼“å†²åŒº
+    size_t length;      // å“åº”çš„é•¿åº¦
     char ssid[32];      // WiFi SSID
     uint8_t idlestatus;      // idle
 } ESP_t;

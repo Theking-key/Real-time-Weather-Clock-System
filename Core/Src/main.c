@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ESP.h"
+#include "msg_parse.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -393,6 +394,7 @@ void ESP_communication(void *argument)
 	  
 	  ESP_CWJAP("abc","12345678");
 	  
+
 	  ESP_HTTP("http://api.seniverse.com/v3/weather/now.json?key=SLQecdOf7gZMznjA0&location=beijing&language=zh-Hans&unit=c");
 	  
 	  
@@ -438,7 +440,9 @@ void Data_Parsing(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    ReceiveMessage();
+    
+    osDelay(100);
   }
   /* USER CODE END Data_Parsing */
 }
